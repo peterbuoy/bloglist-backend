@@ -1,0 +1,15 @@
+@URL = http://localhost:3001/api/blogs
+
+GET {{URL}} 
+###
+
+POST {{URL}} HTTP/1.1
+Content-Type: application/json
+
+{
+	"title": "Title Here",
+  "author": "Author Here",
+  "url": "Url Here",
+  "likes": 1337
+}
+###
