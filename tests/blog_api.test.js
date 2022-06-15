@@ -35,6 +35,30 @@ test("GET /api/blogs returns correct amount of blog posts", async () => {
   expect(response.body).toHaveLength(initialBlogs.length);
 });
 
+/*
+Write a test that verifies that making an HTTP POST request to the /api/blogs url 
+successfully creates a new blog post. At the very least, verify that the total 
+number of blogs in the system is increased by one. You can also verify that 
+the content of the blog post is saved correctly to the database.
+Once the test is finished, refactor the operation to use async/await instead of promises. */
+const blogObject = {
+  title: "NEW TEST Here",
+  author: "NEW TEST AUTHOR Here",
+  url: "Url WOW",
+  likes: 357,
+  id: "61c9cc56fb4zz0f27946a8ef",
+};
+test("POST /api/blogs creates a new blog post", async () => {
+  // get initial blog count
+  const initialCount = await (await api.get("/api/blogs")).body.length;
+  // post
+  const request = await api.post("/api/blogs").send(blogObject);
+  // get
+  const terminalCount = await (await api.get("/api/blogs")).body.length;
+  expect(initialCount === terminalCount - 1);
+  // check db maybe
+});
+
 afterAll(async () => {
   mongoose.connection.close();
 });
