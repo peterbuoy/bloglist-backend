@@ -7,9 +7,9 @@ POST {{URL}} HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Title Here",
+	"title": "New Thing",
   "author": "Author Here",
   "url": "Url Here",
-  "likes": 1337
+  "likes": 4912
 }
 ###
