@@ -70,12 +70,16 @@ describe("HTTP Requests", () => {
     // check initial count of blogs in db
     const initialCount = await Blog.countDocuments({});
     // make request to delete blog by id in db
-    await Blog.deleteOne({ id: blogObject.id });
+    const request = await await api.delete(`/api/blogs/${blogObject.id}`);
     // check terminal count of blogs in db
     const terminalCount = await Blog.countDocuments({});
     // expect
     expect(initialCount === terminalCount - 1);
   });
+  // implement test for updating likes
+  // test("PATCH /api/blogs/:id?likes=500", async () => {
+  //   // get
+  // })
 });
 
 afterAll(async () => {
