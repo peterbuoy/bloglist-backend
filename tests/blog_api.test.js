@@ -1,9 +1,28 @@
-/*Once the test is finished, refactor the route handler to use the async/await syntax instead of promises.*/
 const mongoose = require("mongoose");
+const config = require("../utils/config");
+const logger = require("../utils/logger");
 const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
+
+logger.info("connecting to", config.MONGODB_URI);
+mongoose
+  .connect(config.MONGODB_URI)
+  .then(() => {
+    logger.info("connected to MongoDB");
+  })
+  .catch((error) => {
+    logger.error("error connecting to MongoDB", error.message);
+  });
+
+beforeEach(async () => {
+  await Blog.deleteMany({});
+  for (let note of initialBlogs) {
+    let noteObject = new Blog(note);
+    noteObject.save();
+  }
+});
 
 const initialBlogs = [
   {
@@ -22,41 +41,41 @@ const initialBlogs = [
   },
 ];
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  for (let note of initialBlogs) {
-    let noteObject = new Blog(note);
-    noteObject.save();
-  }
-});
+describe("HTTP Requests", () => {
+  test("GET /api/blogs returns correct amount of blog posts", async () => {
+    const response = await api.get("/api/blogs");
+    expect(response.body).toHaveLength(initialBlogs.length);
+  });
 
-test("GET /api/blogs returns correct amount of blog posts", async () => {
-  const response = await api.get("/api/blogs");
-  expect(response.body).toHaveLength(initialBlogs.length);
-});
+  const blogObject = {
+    title: "NEW TEST Here",
+    author: "NEW TEST AUTHOR Here",
+    url: "Url WOW",
+    likes: 357,
+    id: "61c9cc56fb4zz0f27946a8ef",
+  };
 
-/*
-Write a test that verifies that making an HTTP POST request to the /api/blogs url 
-successfully creates a new blog post. At the very least, verify that the total 
-number of blogs in the system is increased by one. You can also verify that 
-the content of the blog post is saved correctly to the database.
-Once the test is finished, refactor the operation to use async/await instead of promises. */
-const blogObject = {
-  title: "NEW TEST Here",
-  author: "NEW TEST AUTHOR Here",
-  url: "Url WOW",
-  likes: 357,
-  id: "61c9cc56fb4zz0f27946a8ef",
-};
-test("POST /api/blogs creates a new blog post", async () => {
-  // get initial blog count
-  const initialCount = await (await api.get("/api/blogs")).body.length;
-  // post
-  const request = await api.post("/api/blogs").send(blogObject);
-  // get
-  const terminalCount = await (await api.get("/api/blogs")).body.length;
-  expect(initialCount === terminalCount - 1);
-  // check db maybe
+  test("POST /api/blogs creates a new blog post", async () => {
+    // get initial blog count
+    const initialCount = await (await api.get("/api/blogs")).body.length;
+    // post
+    const request = await api.post("/api/blogs").send(blogObject);
+    // get
+    const terminalCount = await (await api.get("/api/blogs")).body.length;
+    expect(initialCount === terminalCount - 1);
+    // check db maybe
+  });
+
+  test("DELETE /api/blogs/:id removes one blog post", async () => {
+    // check initial count of blogs in db
+    const initialCount = await Blog.countDocuments({});
+    // make request to delete blog by id in db
+    await Blog.deleteOne({ id: blogObject.id });
+    // check terminal count of blogs in db
+    const terminalCount = await Blog.countDocuments({});
+    // expect
+    expect(initialCount === terminalCount - 1);
+  });
 });
 
 afterAll(async () => {
