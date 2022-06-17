@@ -76,10 +76,13 @@ describe("HTTP Requests", () => {
     // expect
     expect(initialCount === terminalCount - 1);
   });
+
   // implement test for updating likes
-  // test("PATCH /api/blogs/:id?likes=500", async () => {
-  //   // get
-  // })
+  test("PATCH /api/blogs/:id?likes=500", async () => {
+    const request = await api.patch(`/api/blogs/${blogObject.id}?likes=500`);
+    const blog = await api.get(`/api/blogs/${blogObject.id}`);
+    expect(blog.likes === 500);
+  });
 });
 
 afterAll(async () => {

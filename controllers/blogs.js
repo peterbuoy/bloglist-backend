@@ -6,6 +6,12 @@ blogRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
+// needs a test
+blogRouter.get("/:id", async (request, response) => {
+  const blog = await Blog.findOne({ id: id });
+  response.json(blog);
+});
+
 blogRouter.post("/", async (request, response) => {
   const blog = new Blog(request.body);
   const result = await blog.save();
