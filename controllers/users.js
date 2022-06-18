@@ -1,13 +1,3 @@
-/* 
-Implement a way to create new users by doing a HTTP POST-request to address api/users. 
-Users have username, password and name.
-
-Do not save passwords to the database as clear text, 
-but use the bcrypt library like we did in part 4 chapter Creating new users.
-
-NB Some Windows users have had problems with bcrypt.
-If you run into problems, remove the library with command  
-*/
 const bcrypt = require("bcrypt");
 const userRouter = require("express").Router();
 const User = require("../models/User");
@@ -26,7 +16,10 @@ userRouter.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 });
 
-userRouter.get("/", async);
+userRouter.get("/", async (request, response) => {
+  const users = await User.find({});
+  response.json(users);
+});
 
 module.exports = userRouter;
 /*

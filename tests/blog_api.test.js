@@ -20,7 +20,7 @@ beforeEach(async () => {
   await Blog.deleteMany({});
   for (let note of initialBlogs) {
     let noteObject = new Blog(note);
-    noteObject.save();
+    await noteObject.save();
   }
 });
 
@@ -41,7 +41,7 @@ const initialBlogs = [
   },
 ];
 
-describe("HTTP Requests", () => {
+describe("Blog API", () => {
   test("GET /api/blogs returns correct amount of blog posts", async () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(initialBlogs.length);
