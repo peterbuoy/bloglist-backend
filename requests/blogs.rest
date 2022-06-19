@@ -6,10 +6,10 @@ POST {{URL}} HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Huh Thing",
-  "author": "Thing Here",
-  "url": "Stuff Here",
-  "likes": 4912
+	"title": "Your Mom",
+  "author": "Your Mom's Mom",
+  "url": "Ask your Dad",
+  "likes": 92708
 }
 ###
 PATCH {{URL}}/61c9cc56fb4ba0f27946a8ef?title=BORK HTTP/1.1

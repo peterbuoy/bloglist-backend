@@ -17,6 +17,9 @@ blogRouter.post("/", async (request, response) => {
   const randomUser = await User.findOne({});
   request.body.user = randomUser._id;
   const blog = new Blog(request.body);
+  // need to use the randomUser id and add the corresponding blog post as well
+  randomUser.blogs.push(blog.id);
+  randomUser.save();
   const result = await blog.save();
   response.status(201).json(result);
 });
