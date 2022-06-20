@@ -1,9 +1,11 @@
 @URL = http://localhost:3001/api/blogs
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvZU1hbWEiLCJpZCI6IjYyYWU3YTI3YmJmYzAxMTU2ZTVlYzRiZCIsImlhdCI6MTY1NTY4OTE5N30.2BEfsWQp_rsIoNUTnaAorqTvAhLFZ60uC5mBWeL0voo
 
 GET {{URL}} 
 ###
 POST {{URL}} HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
 
 {
 	"title": "Your Mom",
